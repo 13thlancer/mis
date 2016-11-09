@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mis.mapper.PeopleMapper" >
+    <resultMap id="BaseResultMap" type="com.mis.entity.People" >
+        <id column="userid" property="userid" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="telphone" property="telphone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="regdate" property="regdate" jdbcType="DATE" />
+        <result column="orgid" property="orgid" jdbcType="VARCHAR" />
+        <result column="userintro" property="userintro" jdbcType="VARCHAR" />
+        <result column="userorigo" property="userorigo" jdbcType="VARCHAR" />
+        <result column="usertype" property="usertype" jdbcType="VARCHAR" />
+        <result column="userpic" property="userpic" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <resultMap id="queryForListMap" type="com.mis.entity.User">
+        <id column="userid" property="userid" jdbcType="VARCHAR"/>
+        <result column="peopleid" property="peopleid" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="telphone" property="telphone" jdbcType="VARCHAR"/>
+        <result column="userlevel" property="userlevel" jdbcType="VARCHAR"/>
+        <collection property="people" javaType="java.util.List" ofType="com.mis.entity.People">
+            <id column="id" property="id" jdbcType="VARCHAR" />
+            <result column="name" property="name" jdbcType="VARCHAR" />
+            <result column="position" property="position" jdbcType="VARCHAR" />
+            <result column="orgid" property="orgid" jdbcType="VARCHAR" />
+            <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+            <result column="nativeplace" property="nativeplace" jdbcType="INTEGER" />
+            <result column="picpath" property="picpath" jdbcType="VARCHAR" />
+            <result column="createtime" property="createtime" jdbcType="DATE" />
+            <result column="updatetime" property="updatetime" jdbcType="DATE" />
+        </collection>
+    </resultMap>
+
+
+
+    <insert id="addPeople" parameterType="com.mis.entity.People">
+        insert into t_pm_people (  id,name,orgid,introduce,nativeplace,picpath,createtime)
+        values (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{orgid,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},#{nativeplace,jdbcType=VARCHAR},
+        #{picpath,jdbcType=VARCHAR},#{createtime,jdbcType=DATE})
+    </insert>
+
+    <select id="showPeople" resultMap="queryForListMap">
+        SELECT
+        u.userid,
+        u.email,
+        u.telphone,
+        u.userlevel,
+        p.id,
+        p.name,
+        p.orgid,
+        p.introduce,
+        p.position,
+        p.nativeplace,
+        p.picpath,
+        p.createtime,
+        p.updatetime
+        FROM
+        t_user u
+        LEFT JOIN
+        t_pm_people p
+        ON
+        u.YZJID = p.id
+    </select>
+
+    <!--<select id="showMember" resultMap="BaseResultMap" parameterType="java.lang.String">-->
+        <!--select-->
+        <!--<include refid="ShowAllMember" />-->
+        <!--from t_user-->
+    <!--</select>-->
+
+</mapper>

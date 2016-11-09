@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mis.mapper.ActionMapper" >
+    <resultMap id="BaseResultMap" type="com.mis.entity.Action" >
+        <result column="userid" property="userid" jdbcType="VARCHAR" />
+        <result column="rolenum" property="rolenum" jdbcType="INTEGER" />
+        <result column="actionnum" property="actionnum" jdbcType="VARCHAR" />
+        <result column="actionname" property="actionname" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <select id="getActionById" resultMap="BaseResultMap" parameterType="java.lang.String">
+       SELECT a.actionname,ra.actionnum, ru.rolenum,u.userid
+       FROM t_pm_role_user ru
+       LEFT JOIN t_user u
+       ON u.userid = ru.userid
+       LEFT JOIN t_pm_role_action ra
+       ON ra.rolenum = ru.rolenum
+       LEFT JOIN t_pm_action a
+       ON a.actionnum = ra.actionnum
+       WHERE u.userid = #{userid,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

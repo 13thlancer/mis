@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mis.mapper.OrgMapper" >
+    <resultMap id="BaseResultMap" type="com.mis.entity.Org" >
+        <result column="id" property="id" jdbcType="VARCHAR" />
+        <result column="orgnum" property="orgnum" jdbcType="VARCHAR" />
+        <result column="orgname" property="orgname" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="ShowAllOrg">
+        id,orgnum,orgname
+    </sql>
+
+    <insert id="addOrg" parameterType="com.mis.entity.Org">
+        insert into t_pm_org (id, orgnum, orgname)
+        values (#{id,jdbcType=VARCHAR},#{orgnum,jdbcType=VARCHAR},#{orgname,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="selectOrg" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="ShowAllOrg" />
+        from t_pm_org
+    </select>
+
+</mapper>

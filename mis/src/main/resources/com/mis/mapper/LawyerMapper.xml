@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mis.mapper.LawyerMapper" >
+    <resultMap id="BaseResultMap" type="com.mis.entity.Lawyer" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="picpath" property="picpath" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+        <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+        <collection property="mtype" javaType="java.util.List" ofType="com.mis.entity.MessageType">
+            <id column="id" property="id" jdbcType="INTEGER" />
+            <result column="num" property="num" jdbcType="INTEGER" />
+            <result column="pnum" property="pnum" jdbcType="INTEGER" />
+            <result column="name" property="name" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <sql id="ShowLawyer">
+        id,name,introduce,phone,picpath,type,status,createtime,updatetime
+    </sql>
+
+    <select id="showLawyer" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select *
+        from t_pm_lawyer l
+        left JOIN t_messagetype m
+        on l.type = m.num
+        WHERE l.type LIKE CONCAT(#{type,jdbcType=VARCHAR},'%')
+    </select>
+
+
+    <insert id="addLawyer" parameterType="com.mis.entity.Lawyer">
+        insert into t_pm_lawyer (id,name,introduce,phone,picpath,type,status,createtime)
+        values (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{picpath,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{createtime,jdbcType=TIMESTAMP})
+    </insert>
+
+
+</mapper>

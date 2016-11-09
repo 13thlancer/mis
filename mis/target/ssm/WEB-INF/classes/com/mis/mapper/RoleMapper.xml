@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mis.mapper.RoleMapper" >
+    <resultMap id="BaseResultMap" type="com.mis.entity.Role" >
+        <result column="id" property="id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="num" property="num" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="createdate" property="createdate" jdbcType="DATE" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="telphone" property="telphone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="ShowAllRole">
+        id,rolename,rolenum,status
+    </sql>
+
+    <insert id="insert" parameterType="com.mis.entity.Role">
+        insert into t_pm_role (id, rolename, rolenum,status, createdate)
+        values (#{id,jdbcType=VARCHAR},#{rolename,jdbcType=VARCHAR},#{rolenum,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{createdate,jdbcType=DATE})
+    </insert>
+
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="ShowAllRole" />
+        from t_pm_role
+    </select>
+
+    <update id="statusoff" parameterType="com.mis.entity.Role">
+        update t_pm_role set status = 0
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="statuson" parameterType="com.mis.entity.Role">
+        update t_pm_role set status = 1
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="setAction" parameterType="java.util.List">
+        insert into t_pm_role_action (id,rolenum,actionnum)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id,jdbcType=VARCHAR},#{item.rolenum,jdbcType=VARCHAR},#{item.actionnum,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+</mapper>

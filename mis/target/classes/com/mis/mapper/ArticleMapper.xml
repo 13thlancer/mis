@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mis.mapper.ArticleMapper" >
+    <resultMap id="BaseResultMap" type="com.mis.entity.Article" >
+        <result column="articleid" property="ArticleId" jdbcType="VARCHAR" />
+        <result column="creatorid" property="Creatorid" jdbcType="VARCHAR" />
+        <result column="title" property="Title" jdbcType="VARCHAR" />
+        <result column="content" property="Content" jdbcType="VARCHAR" />
+        <result column="titlepicpath" property="TitlePicpath" jdbcType="VARCHAR" />
+        <result column="messagetype" property="messagetype" jdbcType="INTEGER" />
+        <result column="status" property="Status" jdbcType="INTEGER" />
+        <result column="seq" property="Seq" jdbcType="INTEGER" />
+        <result column="CreateTime" property="CreateTime" jdbcType="TIMESTAMP" />
+        <result column="UpdateTime" property="UpdateTime" jdbcType="TIMESTAMP" />
+       <collection property="mtype" javaType="java.util.List" ofType="com.mis.entity.MessageType">
+            <id column="id" property="id" jdbcType="INTEGER" />
+            <result column="num" property="num" jdbcType="INTEGER" />
+            <result column="pnum" property="pnum" jdbcType="INTEGER" />
+            <result column="name" property="name" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+
+    <resultMap id="TypeResult" type="com.mis.entity.MessageType" >
+        <result column="num" property="num" jdbcType="INTEGER" />
+        <result column="pnum" property="pnum" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <sql id="ShowAllArticle">
+        articleid,creatorid,title,content,titlepicpath,messagetype,status,seq,createtime,updatetime
+    </sql>
+
+    <sql id="ShowType">
+        num,pnum,name
+    </sql>
+
+    <insert id="addArticle" parameterType="com.mis.entity.Article">
+        insert into t_pm_article (articleid,creatorid,title,content,titlepicpath,messagetype,status,seq,createtime,updatetime)
+        values (#{ArticleId,jdbcType=VARCHAR},#{Creatorid,jdbcType=VARCHAR},#{Title,jdbcType=VARCHAR},#{Content,jdbcType=VARCHAR},#{TitlePicpath,jdbcType=VARCHAR},
+        #{messagetype,jdbcType=INTEGER},#{Status,jdbcType=INTEGER},#{Seq,jdbcType=INTEGER},#{CreateTime,jdbcType=TIMESTAMP},#{UpdateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <select id="showArticle" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select *
+        from t_pm_article a
+        left join t_messagetype m
+        on a.messagetype = m.num
+        WHERE a.messagetype LIKE CONCAT(#{mtype,jdbcType=VARCHAR},'%')
+    </select>
+
+    <select id="showType" resultMap="TypeResult" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="ShowType" />
+        from t_messagetype where pnum = #{pnum,jdbcType=INTEGER}
+    </select>
+
+    <select id="showArticleById" resultMap="BaseResultMap" parameterType="java.lang.String">
+         select *
+        from t_pm_article a
+        left join t_messagetype m
+        on a.messagetype = m.num
+        WHERE a.articleid = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateArticle" parameterType="com.mis.entity.Article">
+        update t_pm_article
+        <set>
+            <if test="TitlePicpath!= 'nullnull' and TitlePicpath!='' ">
+                TitlePicpath = #{TitlePicpath},
+            </if>
+                content = #{Content},
+                messagetype = #{messagetype},
+                title = #{Title},
+                seq = #{Seq},
+                updatetime = #{UpdateTime},
+        </set>
+        where articleid = #{ArticleId,jdbcType=VARCHAR}
+    </update>
+
+
+    <update id="statusoff" parameterType="com.mis.entity.Article">
+        update t_pm_article set status = 0
+        where articleid = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="statuson" parameterType="com.mis.entity.Article">
+        update t_pm_article set status = 1
+        where articleid = #{id,jdbcType=VARCHAR}
+    </update>
+
+</mapper>
