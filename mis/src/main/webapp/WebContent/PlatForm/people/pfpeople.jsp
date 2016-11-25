@@ -67,6 +67,7 @@
                                 <th>ID</th>
                                 <th>头像</th>
                                 <th>会员姓名</th>
+                                <th>商会职务</th>
                                 <th>所属组织</th>
                                 <th>联系方式</th>
                                 <th>邮箱</th>
@@ -123,6 +124,9 @@
             error: function () {
             },
             success:function (data) {
+                if(data.type == 'nosignin'){
+                    alert("无查看权限，请联系管理员！")
+                }
                 $('#member').DataTable({
                     oLanguage : {
                         "sLengthMenu": "每页显示 _MENU_ 条记录",
@@ -144,7 +148,12 @@
                         {data: 'people[0].id',sClass:"hiddenCol"},
                         {
                             "render": function (data, type, row) {
-                                var picpath=row.people[0].picpath;
+                                var picpath = null;
+                                if(row.people[0] == null){
+                                    picpath=null;
+                                }else {
+                                     picpath = row.people[0].picpath;
+                                }
 /*
                                 alert(row.people[0].picpath);
 */
@@ -159,6 +168,7 @@
 //                        {data:'userpic'},
                         {data: 'people[0].name'},
                         {data: 'people[0].orgid'},
+                        {data: 'people[0].position'},
                         {data: 'telphone'},
                         {data: 'email'},
                         {data: 'people[0].nativeplace'},

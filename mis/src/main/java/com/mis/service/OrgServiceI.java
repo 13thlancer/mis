@@ -12,4 +12,6 @@ public interface OrgServiceI {
     public void AddOrg(Org org);
 
     public List ShowOrg();
+
+    public List ShowOrgType();
 }

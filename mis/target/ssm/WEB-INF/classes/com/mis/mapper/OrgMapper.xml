@@ -3,17 +3,19 @@
 <mapper namespace="com.mis.mapper.OrgMapper" >
     <resultMap id="BaseResultMap" type="com.mis.entity.Org" >
         <result column="id" property="id" jdbcType="VARCHAR" />
-        <result column="orgnum" property="orgnum" jdbcType="VARCHAR" />
-        <result column="orgname" property="orgname" jdbcType="VARCHAR" />
+        <result column="number" property="number" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="parentnum" property="parentnum" jdbcType="VARCHAR" />
+
     </resultMap>
 
     <sql id="ShowAllOrg">
-        id,orgnum,orgname
+        id,number,name,parentnum
     </sql>
 
     <insert id="addOrg" parameterType="com.mis.entity.Org">
-        insert into t_pm_org (id, orgnum, orgname)
-        values (#{id,jdbcType=VARCHAR},#{orgnum,jdbcType=VARCHAR},#{orgname,jdbcType=VARCHAR})
+        insert into t_pm_org ( id,number,name,parentnum)
+        values (#{id,jdbcType=VARCHAR},#{number,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}),#{parentnum,jdbcType=VARCHAR})
     </insert>
 
     <select id="selectOrg" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -22,4 +24,10 @@
         from t_pm_org
     </select>
 
+
+    <select id="ShowOrgType" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="ShowAllOrg" />
+        from t_pm_org WHERE parentnum is null
+    </select>
 </mapper>

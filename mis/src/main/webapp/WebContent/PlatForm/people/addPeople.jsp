@@ -1,4 +1,4 @@
-<!--
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%
     HttpSession s = request.getSession();
@@ -6,7 +6,7 @@
     String path = request.getContextPath();
     String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
--->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,7 +34,7 @@
         }
     </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" onload="showType()">
 <div class="wrapper">
 
     <jsp:include page="../jsp/header.jsp"></jsp:include>
@@ -42,14 +42,12 @@
         <div>
             <ul id="myTab" class="nav nav-tabs">
                 <li class="active"> <a href="#baseinfo" data-toggle="tab"> 基本信息 </a> </li>
-                <%--<li> <a href="#intro" data-toggle="tab">会员介绍</a> </li>--%>
             </ul>
             <div id="myTabContent" class="tab-content">
                 <div id="baseinfo" class="tab-pane fade in active" >
                     <form id="addPeople" class="form-horizontal" novalidate="novalidate">
                         <fieldset>
                             <input id="ID" type="hidden" name="id">
-
                             <div style="margin-left: 10%;margin-top:1%;">
                                 <div class="form-group">
                                     <label for="username" class="col-sm-2 control-label">姓名</label>
@@ -57,14 +55,12 @@
                                         <input type="text" class="form-control" name="username" id="username">
                                     </div>
                                 </div>
-
                                 <div class="form-group">
-                                    <label for="orgname" class="col-sm-2 control-label">所属组织</label>
+                                    <label for="orgname" class="col-sm-2 control-label">商会职务</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="orgname" id="orgname">
                                     </div>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="telphone" class="col-sm-2 control-label">联系方式</label>
                                     <div class="col-sm-10">
@@ -87,12 +83,11 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="userlevel" class="col-sm-2 control-label">会员等级</label>
+                                    <label for="userlevel" class="col-sm-2 control-label">所属组织</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="userlevel" id="userlevel">
                                     </div>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="Pic" class="col-sm-2 control-label">会员头像</label>
                                     <div class="col-sm-10">
@@ -100,7 +95,6 @@
                                         <div id="view" style=" width:100%;"></div>
                                     </div>
                                 </div>
-
                                 <div class="form-group" >
                                     <label for="Intro" class="col-sm-2 control-label">会员介绍</label>
                                     <div style="margin-left:15%;width:60%;">
@@ -153,7 +147,7 @@
 
     var editor = new wangEditor('Intro');
     editor.config.uploadImgUrl = '<%=basePath%>PeopleController/upload';
-    editor.config.uploadImgFileName = 'upload'
+    editor.config.uploadImgFileName = 'upload';
     editor.create();
 
 
@@ -173,8 +167,7 @@
                 //imgObjPreview.src = docObj.files[0].getAsDataURL();
                 //火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
                 imgObjPreview.src = window.URL.createObjectURL(docObj.files[i]);
-            }
-            else {
+            } else {
                 //IE下，使用滤镜
                 docObj.select();
                 var imgSrc = document.selection.createRange().text;
@@ -199,6 +192,23 @@
         return true;
     }
 
+    function showType(){
+        $.ajax({
+            type:"POST",
+            url:"<%=basePath%>PeopleController/ShowType",
+            async:false,
+            success:function(data) {
+                alert(data.Org[0].name);
+                alert(data.Type[0].name);
+              /*  if (data.type == 'nosignin') {
+                    alert("无添加权限，请联系管理员！")
+                } else {
+
+                }*/
+            }
+        });
+    }
+
     function addPeople() {
         var html = editor.$txt.html();
         var formData = new FormData($( "#addPeople" )[0]);
@@ -210,8 +220,14 @@
             data:formData,
             contentType:false,
             processData:false,
-            success:function(data){
-                window.location.href="pfpeople.jsp";
+            success:function(data) {
+                var d = eval('(' + data + ')');
+
+                if (d.type == 'nosignin') {
+                    alert("无添加权限，请联系管理员！")
+                } else {
+                    window.location.href = "pfpeople.jsp";
+                }
             }
         });
     }

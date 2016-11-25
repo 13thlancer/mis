@@ -28,7 +28,7 @@
         }
     </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" onload="showType()">
 <div class="wrapper">
 
     <jsp:include page="../jsp/header.jsp"></jsp:include>
@@ -42,84 +42,34 @@
                     <form id="addOrg" class="form-horizontal" novalidate="novalidate" style="margin-left: 10%;margin-top:1%;">
                         <fieldset>
                             <input id="ID" type="hidden" name="ID">
-                            <div>
-                                <div style="float:left;">
-                                    <span style="color:red;font-size: 18px;">*&nbsp;</span>
-                                    组织编号
-                                </div>
-                                <div style="margin-left:10px;float:left;">
-                                    <p>
-                                        <input class="vinwi" id="orgnum" type="text" name="orgnum">
-                                    </p>
+                            <div class="form-group">
+                                <label for="number" class="col-sm-2 control-label">组织编号</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="number" id="number" style="width:80%;">
                                 </div>
                             </div>
-                            <br>
-                            <br>
-                            <div>
-                                <div style="float:left;">
-                                    <span style="color:red;font-size: 18px;">*&nbsp;</span>
-                                    组织名称
-                                </div>
-                                <div style="margin-left:10px;float:left;">
-                                    <p>
-                                        <input class="vinwi" id="orgname" type="text" name="orgname">
-                                    </p>
+
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">组织名称</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="name" id="name" style="width:80%;">
                                 </div>
                             </div>
-                            <br>
-                            <br>
+
                             <div>
-                                <div style="float:left;">
-                                    <span style="color:red;font-size: 18px;">*&nbsp;</span>
-                                    组织级别
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="parentnum">父级组织</label>
+                                    <div class="controls">
+                                        <select class="form-control"  style="width:75%;" name="parentnum" id="parentnum">
+                                            <option value="">请选择父级组织...</option>
+                                            <option value="0">无</option>
+
+                                        </select>
+                                    </div>
                                 </div>
-                                <div style="margin-left:10px;float:left;">
-                                    <p>
-                                        <input class="vinwi" id="level" type="text" name="level">
-                                    </p>
-                                </div>
+
                             </div>
-                            <br>
-                            <br>
-                            <div>
-                                <div style="float:left;">
-                                    <span style="color:red;font-size: 18px;">*&nbsp;</span>
-                                    组织介绍
-                                </div>
-                                <div style="margin-left:10px;float:left;">
-                                    <p>
-                                        <input class="vinwi" id="introduce" type="text" name="introduce">
-                                    </p>
-                                </div>
-                            </div>
-                            <br>
-                            <br>
-                            <div>
-                                <div style="float:left;">
-                                    <span style="color:red;font-size: 18px;">*&nbsp;</span>
-                                    上级组织
-                                </div>
-                                <div style="margin-left:10px;float:left;">
-                                    <p>
-                                        <input class="vinwi" id="parent" type="text" name="parent">
-                                    </p>
-                                </div>
-                            </div>
-                            <br>
-                            <br>
-                            <div>
-                                <div style="float:left;">
-                                    <span style="color:red;font-size: 18px;">*&nbsp;</span>
-                                    组织人员
-                                </div>
-                                <div style="margin-left:10px;float:left;">
-                                    <p>
-                                        <input class="vinwi" id="people" type="text" name="people">
-                                    </p>
-                                </div>
-                            </div>
-                            <br>
-                            <br>
+
                         </fieldset>
                     </form>
                     <hr style="height:1px;border:none;border-top:1px solid #555555;" />
@@ -153,6 +103,25 @@
 <script src="../../dist/js/demo.js"></script>
 <script type="text/javascript">
 
+    function showType(){
+        $.ajax({
+            type:"POST",
+            url:"<%=basePath%>OrgController/ShowOrgType",
+            async:false,
+            success:function(data) {
+                if (data.type == 'nosignin') {
+                    alert("无添加权限，请联系管理员！")
+                } else {
+                    var length = data.length;
+                    for(var i = 0;i<length;i++)
+                    {
+                        $('#parentnum').append('<option value='+data[i].number+'>'+data[i].name+'</option>');
+                    }
+                }
+            }
+        });
+    }
+
     function addOrg() {
         var formdata = $('#addOrg').serializeArray();
         $.ajax({
@@ -160,8 +129,14 @@
             url:"<%=basePath%>OrgController/AddOrg",
             async:false,
             data:formdata,
-            success:function(data){
-                window.location.href="pforg.jsp";
+            success:function(data) {
+                var d = eval('(' + data + ')');
+
+                if (d.type == 'nosignin') {
+                    alert("无添加权限，请联系管理员！")
+                } else {
+                    window.location.href = "pforg.jsp";
+                }
             }
         });
     }

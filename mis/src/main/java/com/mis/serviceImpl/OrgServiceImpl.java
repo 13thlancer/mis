@@ -31,4 +31,9 @@ public class OrgServiceImpl implements OrgServiceI {
     public List ShowOrg(){
         return orgMapper.selectOrg();
     }
+
+    @Override
+    public List ShowOrgType() {
+        return orgMapper.ShowOrgType();
+    }
 }

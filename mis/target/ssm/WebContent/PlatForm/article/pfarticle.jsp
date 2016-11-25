@@ -111,7 +111,7 @@
             },
             success:function (data) {
                 if (data.type == 'nosignin') {
-                    alert("无权限，请联系管理员！")
+                    alert("无查看权限，请联系管理员！")
                 } else {
                     $('#Article').DataTable({
                         oLanguage: {

@@ -15,7 +15,7 @@ public class Org {
 
     private String introduce;
 
-    private String parentid;
+    private String parentnum;
 
     private String peopleid;
 
@@ -59,12 +59,12 @@ public class Org {
         this.introduce = introduce;
     }
 
-    public String getParentid() {
-        return parentid;
+    public String getParentnum() {
+        return parentnum;
     }
 
-    public void setParentid(String parentid) {
-        this.parentid = parentid;
+    public void setParentnum(String parentnum) {
+        this.parentnum = parentnum;
     }
 
     public String getPeopleid() {

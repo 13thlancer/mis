@@ -110,7 +110,13 @@
             async:false,
             data:formdata,
             success:function(data){
-                window.location.href="pfrole.jsp";
+                var d = eval('('+data+')');
+
+                if(d.type == 'nosignin'){
+                    alert("无添加权限，请联系管理员！")
+                }else {
+                    window.location.href = "pfrole.jsp";
+                }
             }
         });
     }

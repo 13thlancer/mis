@@ -81,7 +81,7 @@
 <script src="../../bootstrap/js/bootstrap-dialog.js"></script>
 <script src="../../dist/js/demo.js"></script>
 <script type="text/javascript">
-
+    active();
     function showRole() {
         $.ajax({
             type: "post",
@@ -90,7 +90,25 @@
             error: function () {
             },
             success:function (data) {
+                if(data.type == 'nosignin'){
+                    alert("无查看权限，请联系管理员！")
+                }
                 $('#role').DataTable({
+                    oLanguage : {
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        "sInfoEmpty": "没有数据",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "sZeroRecords": "没有检索到数据",
+                        "sSearch": "名称:",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        }
+                    },
                     data: data,
                     columns: [
                         {data: 'id',sClass:"hiddenCol"},

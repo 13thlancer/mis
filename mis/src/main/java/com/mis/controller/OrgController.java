@@ -34,4 +34,9 @@ public class OrgController {
         return orgServiceI.ShowOrg();
     }
 
+    @RequestMapping(value="/ShowOrgType",method = RequestMethod.POST)
+    @ResponseBody
+    public List ShowOrgType(){
+        return orgServiceI.ShowOrgType();
+    }
 }

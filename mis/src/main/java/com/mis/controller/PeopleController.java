@@ -1,9 +1,12 @@
 package com.mis.controller;
 
 import com.mis.Utils.UploadUtil;
+import com.mis.entity.Article;
 import com.mis.entity.People;
 import com.mis.entity.Picture;
 import com.mis.entity.User;
+import com.mis.service.ArticleServiceI;
+import com.mis.service.OrgServiceI;
 import com.mis.service.PeopleServiceI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/9/25.
@@ -42,10 +42,27 @@ public class PeopleController {
     @Autowired
     private PeopleServiceI peopleServiceI;
 
+    @Autowired
+    private OrgServiceI orgServiceI;
+
+    @Autowired
+    private ArticleServiceI articleServiceI;
+
     @RequestMapping(value = "ShowPeople",method= RequestMethod.POST)
     @ResponseBody
     public List ShowPeople(){
         return peopleServiceI.ShowPeople();
+    }
+
+    @RequestMapping(value = "ShowType",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,List> ShowType(){
+        List orgList = orgServiceI.ShowOrg();
+        List typeList = articleServiceI.showType(50);
+        Map<String,List> map = new HashMap<String,List>();
+        map.put("Org",orgList);
+        map.put("Type",typeList);
+        return map;
     }
 
     @ResponseBody

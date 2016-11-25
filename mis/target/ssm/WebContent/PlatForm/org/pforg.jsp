@@ -51,10 +51,7 @@
                                 <th>ID</th>
                                 <th>组织编号</th>
                                 <th>组织名称</th>
-                                <th>组织等级</th>
-                                <th>组织介绍</th>
                                 <th>上级部门</th>
-                                <th>人员</th>
                                 <th>操作</th>
                             </tr>
                             <tbody>
@@ -93,6 +90,9 @@
             error: function () {
             },
             success:function (data) {
+                if(data.type == 'nosignin'){
+                    alert("无查看权限，请联系管理员！")
+                }
                 $('#Org').DataTable({
                     oLanguage : {
                         "sLengthMenu": "每页显示 _MENU_ 条记录",
@@ -114,10 +114,8 @@
                         {data: 'id',sClass:"hiddenCol"},
                         {data: 'number'},
                         {data: 'name'},
-                        {data: 'level'},
-                        {data: 'introduce'},
-                        {data: 'parentid'},
-                        {data: 'peopleid'},
+
+                        {data: 'parentnum'},
                         {
                             "render": function (data, type, row) {
                                 var id= '"' + row.id + '"';

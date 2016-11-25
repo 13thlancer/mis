@@ -13,4 +13,6 @@ public interface OrgMapper {
 
     List<Org> selectOrg();
 
+    List ShowOrgType();
+
 }

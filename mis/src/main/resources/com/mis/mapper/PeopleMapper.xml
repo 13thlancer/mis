@@ -37,8 +37,8 @@
 
 
     <insert id="addPeople" parameterType="com.mis.entity.People">
-        insert into t_pm_people (  id,name,orgid,introduce,nativeplace,picpath,createtime)
-        values (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{orgid,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},#{nativeplace,jdbcType=VARCHAR},
+        insert into t_pm_people (  id,name,position,orgid,introduce,nativeplace,picpath,createtime)
+        values (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{position,jdbcType=VARCHAR},#{orgid,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},#{nativeplace,jdbcType=VARCHAR},
         #{picpath,jdbcType=VARCHAR},#{createtime,jdbcType=DATE})
     </insert>
 
@@ -62,7 +62,7 @@
         LEFT JOIN
         t_pm_people p
         ON
-        u.YZJID = p.id
+        u.peopleid = p.id OR u.YZJid = p.id
     </select>
 
     <!--<select id="showMember" resultMap="BaseResultMap" parameterType="java.lang.String">-->

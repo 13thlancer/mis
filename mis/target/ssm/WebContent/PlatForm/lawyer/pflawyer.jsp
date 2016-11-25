@@ -99,6 +99,9 @@
             error: function () {
             },
             success:function (data) {
+                if(data.type == 'nosignin'){
+                    alert("无查看权限，请联系管理员！")
+                }
                 $('#Article').DataTable({
                     oLanguage : {
                         "sLengthMenu": "每页显示 _MENU_ 条记录",
