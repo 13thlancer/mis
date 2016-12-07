@@ -55,15 +55,10 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>所属平台</th>
-                                <th>所属公司</th>
-                                <th>登录账号</th>
                                 <th>员工</th>
-                                <th>联系方式</th>
-                                <th>邮箱</th>
+                                <th>登录账号</th>
                                 <th>是否启用</th>
                                 <th>操作</th>
-                                <th>密码</th>
                             </tr>
                             <tbody>
                             </tbody>
@@ -123,26 +118,88 @@
                     data: data,
                     columns: [
                         {data: 'userid',sClass:"hiddenCol"},
+                        {data: 'people[0].username'},
                         {data: 'username'},
-                        {data: 'company'},
-                        {data: 'account'},
-                        {data: 'username'},
-                        {data: 'telphone'},
-                        {data: 'email'},
-                        {data: 'status'},
                         {
                             "render": function (data, type, row) {
-                                var id= '"' + row.id + '"';
-                                var html = "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'>启用</button>"
-                                html += "&nbsp;&nbsp;&nbsp;"
-                                html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'>禁用</button>"
-                                html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'>修改</button>"
+                                var status = row.isenabledMis;
+                                if (status == '0') {
+                                    var html = "<button style='height:30px;width:50px;border:none;background: darkred;color:white;margin-left: auto;margin-right: auto;'>禁用</button>"
+                                } else {
+                                    var html = "<button style='height:30px;width:50px;border:none;background: darkgreen;color:white;margin-left: auto;margin-right: auto;'>启用</button>"
+                                }
                                 return html;
                             }
                         },
-                        {data: 'password',sClass:"hiddenCol"}
+                        {
+                            "render": function (data, type, row) {
+                                var id= row.userid;
+                                var html = "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=\"StatusOn('" + id + "')\">启用</button>"
+                                html += "&nbsp;&nbsp;&nbsp;"
+                                html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=\"StatusOff('" + id + "')\">禁用</button>"
+                                html += "&nbsp;&nbsp;&nbsp;"
+                                html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'  onclick=location.href='editmanager.jsp?id=" + id + "'>修改</button>"
+                                html += "&nbsp;&nbsp;&nbsp;"
+                                html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=\"Delete('" + id + "')\">删除</button>"
+                                return html;
+                            }
+                        },
                     ]
                 });
+            }
+        });
+    }
+
+    function StatusOn(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>ManagerController/StatusOn",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("已启用！");
+                    location.reload("pfmanager.jsp");
+                }else{
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
+
+    function StatusOff(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>ManagerController/StatusOff",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("已禁用！");
+                    location.reload("pfmanager.jsp");
+                }else{
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
+
+    function Delete(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>ManagerController/Delete",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("删除成功！");
+                    location.reload("pfmanager.jsp");
+                }else{
+                    alert("操作失败！");
+                }
             }
         });
     }

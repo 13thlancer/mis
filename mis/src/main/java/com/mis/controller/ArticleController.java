@@ -93,14 +93,21 @@ public class ArticleController {
     @RequestMapping(value="StatusOn",method= RequestMethod.POST)
     @ResponseBody
     public String StatusOn(String id) {
-        articleServiceI.StatusOn(id);
+        articleServiceI.statusOn(id);
         return "OK";
     }
 
     @RequestMapping(value="StatusOff", method = RequestMethod.POST)
     @ResponseBody
-    public String StatusOff(String id){
-        articleServiceI.StatusOff(id);
+    public String statusOff(String id){
+        articleServiceI.statusOff(id);
+        return "OK";
+    }
+
+    @ResponseBody
+    @RequestMapping(value="Delete", method = RequestMethod.POST)
+    public String delete(String id){
+        articleServiceI.delete(id);
         return "OK";
     }
 

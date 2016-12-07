@@ -20,8 +20,10 @@ public interface ArticleServiceI {
 
     List<MessageType> showType(int pnum);
 
-    void StatusOn(String id);
+    void statusOn(String id);
 
-    void StatusOff(String id);
+    void statusOff(String id);
+
+    void delete(String id);
 
 }

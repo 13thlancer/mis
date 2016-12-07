@@ -6,22 +6,17 @@ import java.util.Date;
  * Created by Administrator on 2016/9/25.
  */
 public class People {
+
     private String id;
-
-    private String name;
-
-    private String position;
-
+    private String username;
+    private String company;
     private String picpath;
-
     private String nativeplace;
-
     private String introduce;
-
     private String orgid;
-
+    private int companytype;
+    private int seq;
     private Date createtime;
-
     private Date updatetime;
 
     public String getId() {
@@ -32,20 +27,20 @@ public class People {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getPosition() {
-        return position;
+    public String getCompany() {
+        return company;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getPicpath() {
@@ -78,6 +73,22 @@ public class People {
 
     public void setOrgid(String orgid) {
         this.orgid = orgid;
+    }
+
+    public int getCompanytype() {
+        return companytype;
+    }
+
+    public void setCompanytype(int companytype) {
+        this.companytype = companytype;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 
     public Date getCreatetime() {

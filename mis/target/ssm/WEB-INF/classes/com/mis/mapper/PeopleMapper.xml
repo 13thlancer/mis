@@ -3,7 +3,7 @@
 <mapper namespace="com.mis.mapper.PeopleMapper" >
     <resultMap id="BaseResultMap" type="com.mis.entity.People" >
         <id column="userid" property="userid" jdbcType="VARCHAR" />
-        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="name" property="username" jdbcType="VARCHAR" />
         <result column="telphone" property="telphone" jdbcType="VARCHAR" />
         <result column="email" property="email" jdbcType="VARCHAR" />
         <result column="regdate" property="regdate" jdbcType="DATE" />
@@ -19,56 +19,111 @@
         <id column="userid" property="userid" jdbcType="VARCHAR"/>
         <result column="peopleid" property="peopleid" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="isenabledMis" property="isenabledMis" jdbcType="INTEGER"/>
+        <result column="isenabledYZJ" property="isenabledYZJ" jdbcType="INTEGER"/>
         <result column="telphone" property="telphone" jdbcType="VARCHAR"/>
         <result column="userlevel" property="userlevel" jdbcType="VARCHAR"/>
         <collection property="people" javaType="java.util.List" ofType="com.mis.entity.People">
             <id column="id" property="id" jdbcType="VARCHAR" />
-            <result column="name" property="name" jdbcType="VARCHAR" />
-            <result column="position" property="position" jdbcType="VARCHAR" />
+            <result column="name" property="username" jdbcType="VARCHAR" />
+            <result column="company" property="company" jdbcType="VARCHAR" />
             <result column="orgid" property="orgid" jdbcType="VARCHAR" />
             <result column="introduce" property="introduce" jdbcType="VARCHAR" />
             <result column="nativeplace" property="nativeplace" jdbcType="INTEGER" />
             <result column="picpath" property="picpath" jdbcType="VARCHAR" />
+            <result column="companytype" property="companytype" jdbcType="VARCHAR" />
+            <result column="seq" property="seq" jdbcType="INTEGER" />
             <result column="createtime" property="createtime" jdbcType="DATE" />
             <result column="updatetime" property="updatetime" jdbcType="DATE" />
+        </collection>
+        <collection property="org" javaType="java.util.List" ofType="com.mis.entity.Org">
+            <id column="id" property="id" jdbcType="VARCHAR" />
+            <result column="orgname" property="orgname" jdbcType="VARCHAR" />
+            <result column="orgnumber" property="orgnumber" jdbcType="VARCHAR" />
         </collection>
     </resultMap>
 
 
 
     <insert id="addPeople" parameterType="com.mis.entity.People">
-        insert into t_pm_people (  id,name,position,orgid,introduce,nativeplace,picpath,createtime)
-        values (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{position,jdbcType=VARCHAR},#{orgid,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},#{nativeplace,jdbcType=VARCHAR},
+        insert into t_pm_people (  id,username,orgid,introduce,nativeplace,picpath,createtime)
+        values (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{orgid,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},#{nativeplace,jdbcType=VARCHAR},
         #{picpath,jdbcType=VARCHAR},#{createtime,jdbcType=DATE})
     </insert>
 
     <select id="showPeople" resultMap="queryForListMap">
         SELECT
-        u.userid,
-        u.email,
-        u.telphone,
-        u.userlevel,
-        p.id,
-        p.name,
-        p.orgid,
-        p.introduce,
-        p.position,
-        p.nativeplace,
-        p.picpath,
-        p.createtime,
-        p.updatetime
+        *
+        FROM
+        t_user u
+        LEFT JOIN
+        t_pm_people p
+        ON u.peopleid = p.id OR u.YZJid = p.id
+        LEFT JOIN
+        t_pm_org o
+        ON p.orgid = o.orgnumber
+    </select>
+
+    <select id="showPeopleById" resultMap="queryForListMap" parameterType="java.lang.String">
+        SELECT
+        *
         FROM
         t_user u
         LEFT JOIN
         t_pm_people p
         ON
         u.peopleid = p.id OR u.YZJid = p.id
+        where u.userid = #{id,jdbcType=VARCHAR}
     </select>
 
-    <!--<select id="showMember" resultMap="BaseResultMap" parameterType="java.lang.String">-->
-        <!--select-->
-        <!--<include refid="ShowAllMember" />-->
-        <!--from t_user-->
-    <!--</select>-->
+    <select id="showPeopleByOrgnum" resultMap="queryForListMap" parameterType="java.lang.String">
+        SELECT
+        *
+        FROM
+        t_user u
+        LEFT JOIN
+        t_pm_people p
+        ON u.peopleid = p.id OR u.YZJid = p.id
+        LEFT JOIN
+        t_pm_org o
+        ON p.orgid = o.orgnumber
+        WHERE p.orgid = #{orgnum,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updatePeople" parameterType="com.mis.entity.People">
+        update t_pm_people
+        <set>
+            <if test="picpath!= 'nullnull' and picpath!='' ">
+                picpath = #{picpath},
+            </if>
+            name = #{username},
+            company = #{company},
+            nativeplace = #{nativeplace},
+            introduce = #{introduce},
+            orgid = #{orgid},
+            companytype = #{companytype},
+            seq = #{seq},
+            updatetime = #{updatetime},
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deletePeople" parameterType="java.lang.String">
+        delete from t_pm_people where id=#{id}
+    </delete>
+
+    <delete id="deleteUser" parameterType="java.lang.String">
+        delete from t_user where YZJID=#{id} or peopleid=#{id}
+    </delete>
+
+    <update id="statusoff" parameterType="java.lang.String">
+        update t_user set isenabledYZJ = '0'
+        where YZJID = #{id,jdbcType=VARCHAR} OR peopleid =  #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="statuson" parameterType="java.lang.String">
+        update t_user set isenabledYZJ = '1'
+        where YZJID = #{id,jdbcType=VARCHAR} OR peopleid =  #{id,jdbcType=VARCHAR}
+    </update>
 
 </mapper>

@@ -70,12 +70,17 @@ public class ArticleServiceImpl implements ArticleServiceI {
     }
 
     @Override
-    public void StatusOn(String id) {
+    public void statusOn(String id) {
         articleMapper.statuson(id);
     }
 
     @Override
-    public void StatusOff(String id) {
+    public void statusOff(String id) {
         articleMapper.statusoff(id);
+    }
+
+    @Override
+    public void delete(String id) {
+        articleMapper.delete(id);
     }
 }

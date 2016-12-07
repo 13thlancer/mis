@@ -21,11 +21,11 @@ public class User {
 
     private String email;
 
-    private String isenabledMis;
+    private Boolean isenabledMis;
 
-    private String isenabledWX;
+    private Boolean isenabledWX;
 
-    private String isenabledYZJ;
+    private Boolean isenabledYZJ;
 
     private Date regdate;
 
@@ -36,6 +36,8 @@ public class User {
     private String peopleid;
 
     private List<People> people;
+
+    private List<Org> org;
 
     public String getUserid() {
         return userid;
@@ -101,27 +103,27 @@ public class User {
         this.email = email;
     }
 
-    public String getIsenabledMis() {
+    public Boolean getIsenabledMis() {
         return isenabledMis;
     }
 
-    public void setIsenabledMis(String isenabledMis) {
+    public void setIsenabledMis(Boolean isenabledMis) {
         this.isenabledMis = isenabledMis;
     }
 
-    public String getIsenabledWX() {
+    public Boolean getIsenabledWX() {
         return isenabledWX;
     }
 
-    public void setIsenabledWX(String isenabledWX) {
+    public void setIsenabledWX(Boolean isenabledWX) {
         this.isenabledWX = isenabledWX;
     }
 
-    public String getIsenabledYZJ() {
+    public Boolean getIsenabledYZJ() {
         return isenabledYZJ;
     }
 
-    public void setIsenabledYZJ(String isenabledYZJ) {
+    public void setIsenabledYZJ(Boolean isenabledYZJ) {
         this.isenabledYZJ = isenabledYZJ;
     }
 
@@ -163,5 +165,13 @@ public class User {
 
     public void setPeople(List<People> people) {
         this.people = people;
+    }
+
+    public List<Org> getOrg() {
+        return org;
+    }
+
+    public void setOrg(List<Org> org) {
+        this.org = org;
     }
 }

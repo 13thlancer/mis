@@ -7,9 +7,9 @@ public class Org {
 
     private String id;
 
-    private String number;
+    private String orgnumber;
 
-    private String name;
+    private String orgname;
 
     private int level;
 
@@ -27,20 +27,20 @@ public class Org {
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getOrgnumber() {
+        return orgnumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setOrgnumber(String orgnumber) {
+        this.orgnumber = orgnumber;
     }
 
-    public String getName() {
-        return name;
+    public String getOrgname() {
+        return orgname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrgname(String orgname) {
+        this.orgname = orgname;
     }
 
     public int getLevel() {

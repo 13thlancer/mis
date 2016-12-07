@@ -1,16 +1,21 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     HttpSession s = request.getSession();
-    String picpath = s.getAttribute("picpath").toString();
-    String name = s.getAttribute("name").toString();
-    String path = request.getContextPath();
-    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+    String picpath = null;
+    String name=null;
+if(s.getAttribute("name") == null || s.getAttribute("name") == "")
+{%>
+
+<script>
+    window.location.href="../login.jsp";
+</script>
+    <%}else{
+         picpath = s.getAttribute("picpath").toString();
+         name = s.getAttribute("name").toString();
+    }
     java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
     java.util.Date currentTime = new java.util.Date();//得到当前系统时间
     String str_date1 = formatter.format(currentTime); //将日期时间格式化
-    String str_date2 = currentTime.toString(); //将Date型日期时间转换成字符串形式
-
 %>
 <html>
 <head>
@@ -42,9 +47,9 @@
                         <!-- User image -->
                         <li class="user-header">
                             <img id="img2" src="<%=picpath %>" class="img-circle" alt="User Image">
-                            <p>
+                            <p id="pname">
                                 <%=name %>
-                                <h5> <%=str_date1 %></h5>
+                                <h5 id="date"> <%=str_date1 %></h5>
                             </p>
                         </li>
 
@@ -94,7 +99,7 @@
                 </ul>
             </li>
 
-            <li class="treeview">
+         <%--   <li class="treeview">
                 <a href="#">
                     <i class="fa fa-table"></i><span>用户管理</span>
                 <span class="pull-right-container">
@@ -106,7 +111,7 @@
                     <li><a href="require_user.jsp"><i class="fa fa-circle-o"></i>微信用户</a></li>
                     <li><a href="Yzj_user.jsp"><i class="fa fa-circle-o"></i>云之家用户</a></li>
                 </ul>
-            </li>
+            </li>--%>
 
             <li class="treeview">
                 <a href="#">
@@ -133,25 +138,9 @@
                 </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="active"><a href="require_order.jsp"><i class="fa fa-circle-o"></i>需求意向</a></li>
+                    <li class="active"><a href="../order/pforder.jsp"><i class="fa fa-circle-o"></i>需求意向</a></li>
                 </ul>
             </li>
-
-            <%--<li class="treeview">--%>
-                <%--<a href="#">--%>
-                    <%--<i class="fa fa-table"></i> <span>点赞系统</span>--%>
-                <%--<span class="pull-right-container">--%>
-                  <%--<i class="fa fa-angle-left pull-right"></i>--%>
-                <%--</span>--%>
-                <%--</a>--%>
-                <%--<ul class="treeview-menu">--%>
-                    <%--<li><a href="flypig_gift.jsp"><i class="fa fa-circle-o"></i>奖品维护</a></li>--%>
-                    <%--<li><a href="flypig_user.jsp"><i class="fa fa-circle-o"></i>用户维护</a></li>--%>
-                    <%--<li><a href="flypig_convert.jsp"><i class="fa fa-circle-o"></i>奖品兑换</a></li>--%>
-                    <%--<li><a href="flypig.jsp"><i class="fa fa-circle-o"></i>点赞维护</a></li>--%>
-                <%--</ul>--%>
-            <%--</li>--%>
-
 
         </ul>
     </section>
@@ -180,11 +169,15 @@
     }
 
     function userinfo(){
-
-//        var href = document.getElementsByTagName('li')[6].getElementsByTagName('a')[0];
-//        alert(count.length);
-
-        var pp= '<%=picpath %>';
+        <%--var name = "<%=name %>";--%>
+        var pp= "<%=picpath %>";
+        <%--var date  = "<%=str_date1 %>"--%>
+        <%--if(name == null){--%>
+            <%--window.location.href="login.jsp"--%>
+        <%--}--%>
+        <%--document.getElementById("name").innerHTML = "你好，"+name;--%>
+        <%--document.getElementById("pname").innerHTML = name;--%>
+        <%--document.getElementById("date").innerHTML = date;--%>
         document.getElementById("img1").src = pp;
         document.getElementById("img2").src = pp;
     }

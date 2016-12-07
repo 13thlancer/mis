@@ -37,7 +37,7 @@ public class LoginController {
 
         if(list.size() != 0) {
             httpSession.setAttribute("picpath",list.get(0).getPeople().get(0).getPicpath());
-            httpSession.setAttribute("name",list.get(0).getPeople().get(0).getName());
+            httpSession.setAttribute("name",list.get(0).getPeople().get(0).getUsername());
             httpSession.setAttribute("userid",list.get(0).getUserid());
             return "OK";
         }

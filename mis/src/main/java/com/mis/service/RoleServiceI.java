@@ -9,13 +9,15 @@ import java.util.List;
  */
 public interface RoleServiceI {
 
-    public void AddRole(Role role);
+    public void addRole(Role role);
 
-    public List ShowRole();
+    public List showRole();
 
-    public void StatusOn(String id);
+    public List showAllRole();
 
-    public void StatusOff(String id);
+    public void statusOn(String id);
 
-    public void EditAction(String rolenum,String actionnum);
+    public void statusOff(String id);
+
+    public void editAction(String rolenum,String actionnum);
 }

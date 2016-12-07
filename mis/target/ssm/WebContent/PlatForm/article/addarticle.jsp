@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%
-    HttpSession s = request.getSession();
-    String username=(String)s.getAttribute("username");
     String path = request.getContextPath();
     String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
@@ -62,6 +60,16 @@
                                 <label for="Title" class="col-sm-2 control-label">标题内容</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="Title" id="Title" style="width:80%;">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="isad">广告位</label>
+                                <div class="controls">
+                                    <select class="form-control"  style="width:75%;" name="isad" id="isad">
+                                        <option value="0">否</option>
+                                        <option value='1'>是</option>
+                                    </select>
                                 </div>
                             </div>
 

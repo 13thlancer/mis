@@ -15,4 +15,12 @@ public interface ManagerMapper {
     int bindRole(RoleUser ru);
 
     List<Manager> selectManager();
+
+    void edit(Manager manager);
+
+    void statusOn(String id);
+
+    void statusOff(String id);
+
+    void delete(String id);
 }

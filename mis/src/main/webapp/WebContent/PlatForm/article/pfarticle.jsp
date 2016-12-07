@@ -30,6 +30,10 @@
         {
             text-align:center;
         }
+        .title
+        {
+            width:200px;
+        }
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini" onload="showArticle();">
@@ -114,6 +118,9 @@
                     alert("无查看权限，请联系管理员！")
                 } else {
                     $('#Article').DataTable({
+                        "bProcessing" : true,
+                        scrollX: true,
+                        bAutoWidth: false,
                         oLanguage: {
                             "sLengthMenu": "每页显示 _MENU_ 条记录",
                             "sZeroRecords": "抱歉， 没有找到",
@@ -132,7 +139,7 @@
                         data: data,
                         columns: [
                             {data: 'articleId', sClass: "hiddenCol"},
-                            {data: 'title'},
+                            {data: 'title',sClass:"title"},
                             {
                                 "render": function (data, type, row) {
                                     var titlePicpath = row.titlePicpath;
@@ -158,14 +165,26 @@
                             {
                                 "render": function (data, type, row) {
                                     var id = row.articleId;
-                                    var html = "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=\"StatusOn('" + id + "')\">启用</button>"
-                                    html += "&nbsp;&nbsp;&nbsp;"
-                                    html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=\"StatusOff('" + id + "')\">禁用</button>"
-                                    html += "&nbsp;&nbsp;&nbsp;"
-                                    html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=location.href='editarticle.jsp?id=" + id + "&&mtype="+r[2]+"'>编辑</button>"
-                                    html += "&nbsp;&nbsp;&nbsp;"
-                                    html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=location.href='viewarticle.jsp?id=" + id + "'>查看</button>"
-                                    return html;
+                                    var status = row.status;
+                                    if(status == '0'){
+                                        var html = "<button style='height:30px;width:40px;border:none;background: steelblue;color:white;' onclick=\"StatusOn('" + id + "')\">启用</button>"
+                                        html += "&nbsp;&nbsp;&nbsp;"
+                                        html += "<button style='height:30px;width:40px;border:none;background: steelblue;color:white;' onclick=location.href='editarticle.jsp?id=" + id + "&&mtype="+r[2]+"'>编辑</button>"
+                                        html += "&nbsp;&nbsp;&nbsp;"
+                                        html += "<button style='height:30px;width:40px;border:none;background:darkred;color:white;' onclick=\"Delete('" + id + "')\">删除</button>"
+                                        html += "&nbsp;&nbsp;&nbsp;"
+                                        html += "<button style='height:30px;width:40px;border:none;background: steelblue;color:white;' onclick=location.href='viewarticle.jsp?id=" + id + "'>查看</button>"
+                                        return html;
+                                    }else{
+                                        var html = "<button style='height:30px;width:40px;border:none;background: steelblue;color:white;' onclick=\"StatusOff('" + id + "')\">禁用</button>"
+                                        html += "&nbsp;&nbsp;&nbsp;"
+                                        html += "<button style='height:30px;width:40px;border:none;background: steelblue;color:white;' onclick=location.href='editarticle.jsp?id=" + id + "&&mtype="+r[2]+"'>编辑</button>"
+                                        html += "&nbsp;&nbsp;&nbsp;"
+                                        html += "<button style='height:30px;width:40px;border:none;background:darkred;color:white;' onclick=\"Delete('" + id + "')\">删除</button>"
+                                        html += "&nbsp;&nbsp;&nbsp;"
+                                        html += "<button style='height:30px;width:40px;border:none;background: steelblue;color:white;' onclick=location.href='viewarticle.jsp?id=" + id + "'>查看</button>"
+                                        return html;
+                                    }
                                 }
                             }
                         ],
@@ -188,7 +207,7 @@
             success:function (data) {
                 if(data=="OK"){
                     alert("已启用！");
-                    location.reload("pfrole.jsp");
+                    location.reload("pfarticle.jsp");
                 }else{
                     alert("操作失败！");
                 }
@@ -206,7 +225,25 @@
             success:function (data) {
                 if(data=="OK"){
                     alert("已禁用！");
-                    location.reload("pfrole.jsp");
+                    location.reload("pfarticle.jsp");
+                }else{
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
+
+    function Delete(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>ArticleController/Delete",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("删除成功！");
+                    location.reload("pfarticle.jsp");
                 }else{
                     alert("操作失败！");
                 }

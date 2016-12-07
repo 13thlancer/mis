@@ -32,7 +32,7 @@
         }
     </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini" onload="showRole();">
+<body class="hold-transition skin-blue sidebar-mini" onload="showRole()">
 <div class="wrapper">
 
 <jsp:include page="../jsp/header.jsp"></jsp:include>
@@ -85,14 +85,14 @@
     function showRole() {
         $.ajax({
             type: "post",
-            url: "<%=basePath%>RoleController/ShowRole",
+            url: "<%=basePath%>RoleController/ShowAllRole",
             dataType: "json",
             error: function () {
             },
             success:function (data) {
-                if(data.type == 'nosignin'){
-                    alert("无查看权限，请联系管理员！")
-                }
+//                if(data.type == 'nosignin'){
+//                    alert("无查看权限，请联系管理员！")
+//                }
                 $('#role').DataTable({
                     oLanguage : {
                         "sLengthMenu": "每页显示 _MENU_ 条记录",

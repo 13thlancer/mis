@@ -6,48 +6,44 @@ import java.util.Date;
  * Created by admin on 2016/9/23.
  */
 public class Manager {
-    private String userid;
+    private String id;
 
-    private String username;
+    private String employeename;
 
-    private String sysaccount;
+    private String account;
 
     private String password;
 
-    private String telphone;
-
-    private String email;
+    private String repassword;
 
     private String isenabledMis;
 
     private Date regdate;
 
-    private String usertype;
-
     private String roletype;
 
-    public String getUserid() {
-        return userid;
+    public String getId() {
+        return id;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmployeename() {
+        return employeename;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmployeename(String employeename) {
+        this.employeename = employeename;
     }
 
-    public String getSysaccount() {
-        return sysaccount;
+    public String getAccount() {
+        return account;
     }
 
-    public void setSysaccount(String sysaccount) {
-        this.sysaccount = sysaccount;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getPassword() {
@@ -58,20 +54,12 @@ public class Manager {
         this.password = password;
     }
 
-    public String getTelphone() {
-        return telphone;
+    public String getRepassword() {
+        return repassword;
     }
 
-    public void setTelphone(String telphone) {
-        this.telphone = telphone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setRepassword(String repassword) {
+        this.repassword = repassword;
     }
 
     public String getIsenabledMis() {
@@ -88,14 +76,6 @@ public class Manager {
 
     public void setRegdate(Date regdate) {
         this.regdate = regdate;
-    }
-
-    public String getUsertype() {
-        return usertype;
-    }
-
-    public void setUsertype(String usertype) {
-        this.usertype = usertype;
     }
 
     public String getRoletype() {

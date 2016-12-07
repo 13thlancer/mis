@@ -12,8 +12,8 @@
         <result column="userlevel" property="userlevel" jdbcType="VARCHAR"/>
         <collection property="people" javaType="java.util.List" ofType="com.mis.entity.People">
             <id column="id" property="id" jdbcType="VARCHAR" />
-            <result column="name" property="name" jdbcType="VARCHAR" />
-            <result column="position" property="position" jdbcType="VARCHAR" />
+            <result column="name" property="username" jdbcType="VARCHAR" />
+            <result column="company" property="company" jdbcType="VARCHAR" />
             <result column="orgid" property="orgid" jdbcType="VARCHAR" />
             <result column="introduce" property="introduce" jdbcType="VARCHAR" />
             <result column="nativeplace" property="nativeplace" jdbcType="INTEGER" />
@@ -35,7 +35,7 @@
         p.name,
         p.orgid,
         p.introduce,
-        p.position,
+        p.company,
         p.nativeplace,
         p.picpath,
         p.createtime,

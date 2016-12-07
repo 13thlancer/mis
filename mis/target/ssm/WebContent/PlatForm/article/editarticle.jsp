@@ -68,6 +68,16 @@
                         </div>
 
                         <div class="form-group">
+                            <label class="col-sm-2 control-label" for="isad">广告位</label>
+                            <div class="controls">
+                                <select class="form-control"  style="width:75%;" name="isad" id="isad">
+                                    <option value="0">否</option>
+                                    <option value='1'>是</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="TitlePicpath" class="col-sm-2 control-label">标题图片</label>
                             <div class="col-sm-10">
                                 <input type="file" class="form-control" name="TitlePicpath" id="TitlePicpath" style="width:80%;" onchange="javascript:setImagePreviews();" accept="image/*" >
@@ -220,7 +230,6 @@
     }
 
     function showType(){
-
         var postdata={
             pnum:t[2]
         }

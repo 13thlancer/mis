@@ -52,36 +52,51 @@
             <ul id="myTab" class="nav nav-tabs">
                 <li class="active"> <a href="#home" data-toggle="tab"> 新增管理账号</a> </li>
             </ul>
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel">新增</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label for="orgname">组织名称</label>
+                                <select class="form-control"  style="width:80%;" name="orgname" id="orgname" onchange="orgChange()">
+                                    <option value="">请选择所属组织...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">人员</label>
+                                <select class="form-control"  style="width:80%;" name="username" id="username">
+                                    <option value="">请选择人员...</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal" onclick="choseuser();">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="myTabContent" class="tab-content">
                 <div class="tab-pane fade in active" id="home">
                     <form id="addManager" class="form-horizontal" novalidate="novalidate" style="margin-left: 10%;margin-top:1%;">
                         <fieldset>
-                            <input id="ID" type="hidden" name="id">
+                            <input id="id" type="hidden" name="id">
 
-                            <div class="form-group">
-                                <label for="name" class="col-sm-2 control-label">集团</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="platform" id="name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="companyname" class="col-sm-2 control-label">所属公司</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="company" id="companyname">
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="employname" class="col-sm-2 control-label">员工</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="employname" id="employname">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="username" class="col-sm-2 control-label">用户名</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="username" id="username">
-                                </div>
-                            </div>
+
                             <div class="form-group">
                                 <label for="account" class="col-sm-2 control-label">登录帐号</label>
                                 <div class="col-sm-10">
@@ -100,18 +115,8 @@
                                     <input type="text" class="form-control" name="repassword" id="repassword">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="telphone" class="col-sm-2 control-label">电话</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="telphone" id="telphone">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="col-sm-2 control-label">邮箱</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="email" id="email">
-                                </div>
-                            </div>
+
+
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="roletype">角色类型</label>
                                 <div class="controls">
@@ -154,6 +159,37 @@
 <script src="../../dist/js/demo.js"></script>
 <script type="text/javascript">
 
+    $("#employname").click(function () {
+        $("#myModalLabel").text("选择人员");
+        $('#myModal').modal();
+    });
+
+    function orgChange(){
+        document.getElementById("username").options.length=1;
+        var orgnum = document.getElementById("orgname").value;
+        var postdata = {orgnum:orgnum};
+        $.ajax({
+            type:"POST",
+            url:"<%=basePath%>PeopleController/ShowPeopleByOrgnum",
+            data:postdata,
+            async:false,
+            success:function(data){
+                var len = data.length;
+                for(var i = 0;i<len;i++)
+                {
+                    $('#username').append('<option value='+data[i].userid+'>'+data[i].people[0].username+'</option>');
+                }
+            }
+        });
+    }
+
+    function choseuser(){
+      document.getElementById("employname").value = $("#username").find("option:selected").text();
+        alert( $("#username ").val());
+      document.getElementById("id").value = $("#username ").val();
+        alert( document.getElementById("id").value);
+    }
+
     function addManager() {
         var formdata = $('#addManager').serializeArray();
         $.ajax({
@@ -162,12 +198,17 @@
             async:false,
             data:formdata,
             success:function(data) {
-                var d = eval('(' + data + ')');
-
-                if (d.type == 'nosignin') {
-                    alert("无添加权限，请联系管理员！")
-                } else {
+//                var d = eval('(' + data + ')');
+//
+//                if (d.type == 'nosignin') {
+//                    alert("无添加权限，请联系管理员！")
+//                } else {
+//                    location.href("pfmanager.jsp");
+//                }
+                if(data == 'OK'){
                     location.href("pfmanager.jsp");
+                }else{
+                    alert(data);
                 }
             }
         });
@@ -179,10 +220,14 @@
             url:"<%=basePath%>RoleController/ShowRole",
             async:false,
             success:function(data){
-                var length = data.length;
-                for(var i = 0;i<length;i++)
+                var rolelen = data.role.length;
+                for(var i = 0;i<rolelen;i++)
                 {
-                    $('#roletype').append('<option value='+data[i].rolenum+'>'+data[i].rolename+'</option>');
+                    $('#roletype').append('<option value='+data.role[i].rolenum+'>'+data.role[i].rolename+'</option>');
+                }
+                var orglen = data.org.length;
+                for(var j=0;j<orglen;j++){
+                    $('#orgname').append('<option value='+data.org[j].orgnumber+'>'+data.org[j].orgname+'</option>');
                 }
             }
         });

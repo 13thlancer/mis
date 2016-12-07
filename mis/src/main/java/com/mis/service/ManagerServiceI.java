@@ -10,7 +10,15 @@ import java.util.List;
  */
 public interface ManagerServiceI {
 
-    void AddManager(Manager manager);
+    void addManager(Manager manager);
 
-    List<Manager> ShowManager();
+    void edit(Manager manager);
+
+    List<Manager> showManager();
+
+    void statusOn(String id);
+
+    void delete(String id);
+
+    void statusOff(String id);
 }

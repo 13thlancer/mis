@@ -85,8 +85,6 @@
             type: "post",
             url: "<%=basePath%>OrgController/ShowOrg",
             dataType: "json",
-            data: {},
-            checkbox:true,
             error: function () {
             },
             success:function (data) {
@@ -94,6 +92,8 @@
                     alert("无查看权限，请联系管理员！")
                 }
                 $('#Org').DataTable({
+                    scrollX: true,
+                    bAutoWidth: false,
                     oLanguage : {
                         "sLengthMenu": "每页显示 _MENU_ 条记录",
                         "sZeroRecords": "抱歉， 没有找到",
@@ -112,14 +112,14 @@
                     data: data,
                     columns: [
                         {data: 'id',sClass:"hiddenCol"},
-                        {data: 'number'},
-                        {data: 'name'},
+                        {data: 'orgnumber'},
+                        {data: 'orgname'},
 
                         {data: 'parentnum'},
                         {
                             "render": function (data, type, row) {
-                                var id= '"' + row.id + '"';
-                                var html = "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'>修改</button>"
+                                var id=  row.id;
+                                var html = "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'  onclick=location.href='editorg.jsp?id="+ id + "'>修改</button>"
                                 html += "&nbsp;&nbsp;&nbsp;"
                                 html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'>启用</button>"
                                 html += "&nbsp;&nbsp;&nbsp;"
@@ -135,6 +135,43 @@
             }
         });
     }
+
+    function StatusOn(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>ArticleController/StatusOn",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("已启用！");
+                    location.reload("pforg.jsp");
+                }else{
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
+
+    function StatusOff(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>ArticleController/StatusOff",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("已禁用！");
+                    location.reload("pforg.jsp");
+                }else{
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

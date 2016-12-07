@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mis.mapper.OrderMapper" >
+    <resultMap id="BaseResultMap" type="com.mis.entity.Order" >
+        <result column="id" property="id" jdbcType="VARCHAR" />
+        <result column="userid" property="userid" jdbcType="VARCHAR" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="requirenum" property="requirenum" jdbcType="VARCHAR" />
+        <result column="requirename" property="requirename" jdbcType="VARCHAR" />
+        <result column="requiredate" property="requiredate" jdbcType="DATE" />
+        <result column="requiretype" property="requiretype" jdbcType="VARCHAR" />
+        <result column="requirestatus" property="requirestatus" jdbcType="INTEGER" />
+        <result column="conname" property="conname" jdbcType="VARCHAR" />
+        <result column="conphone" property="conphone" jdbcType="VARCHAR" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <collection property="mtype" javaType="java.util.List" ofType="com.mis.entity.MessageType">
+            <id column="id" property="id" jdbcType="INTEGER" />
+            <result column="num" property="num" jdbcType="INTEGER" />
+            <result column="pnum" property="pnum" jdbcType="INTEGER" />
+            <result column="name" property="name" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <select id="showOrder" resultMap="BaseResultMap">
+        select * from t_pm_requireorder r
+        left join t_messagetype m
+        ON  r.requiretype = m.num
+    </select>
+
+    <select id="showOrderById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from t_pm_requireorder where id= #{id}
+    </select>
+
+    <insert id="addOrder" parameterType="com.mis.entity.Order">
+        insert into t_pm_requireorder (id,userid,username,requirenum,requirename,requiredate,requiretype,requirestatus,conname,conphone,company)
+        values (#{id,jdbcType=VARCHAR},#{userid,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR},#{requirenum,jdbcType=VARCHAR},#{requirename,jdbcType=VARCHAR},#{requiredate,jdbcType=DATE},
+        #{requiretype,jdbcType=VARCHAR},#{requirestatus,jdbcType=INTEGER},#{conname,jdbcType=VARCHAR},#{conphone,jdbcType=VARCHAR},#{company,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="editOrder" parameterType="com.mis.entity.Order">
+        update t_pm_requireorder
+        <set>
+            userid = #{userid},
+            username = #{username},
+            requirenum = #{requirenum},
+            requirename = #{requirename},
+            requiretype = #{requiretype},
+            requirestatus = #{requirestatus},
+            conname = #{conname},
+            conphone = #{conphone},
+            company = #{company},
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteOrder" parameterType="java.lang.String">
+        delete from t_pm_requireorder where id=#{id,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="statusOff" parameterType="com.mis.entity.Article">
+        update t_pm_requireorder set requirestatus = 1
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="statusOn" parameterType="com.mis.entity.Article">
+        update t_pm_requireorder set requirestatus = 2
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="push" parameterType="java.lang.String">
+        update t_pm_requireorder set requirestatus = 2
+        where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

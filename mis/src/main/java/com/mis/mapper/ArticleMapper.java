@@ -24,4 +24,6 @@ public interface ArticleMapper {
 
     int statuson(String id);
 
+    void delete(String id);
+
 }

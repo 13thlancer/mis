@@ -72,10 +72,7 @@
                                 <th>联系方式</th>
                                 <th>邮箱</th>
                                 <th>籍贯</th>
-                                <th>会员类型</th>
-<%--
-                                <th>个人简介</th>
---%>
+                                <th>状态</th>
                                 <th>操作</th>
                             </tr>
                             <tbody>
@@ -113,7 +110,6 @@
 <!-- page script -->
 <script type="text/javascript">
 
-
     /*datatable插件赋值及属性设置*/
     function ShowPeople() {
         active();
@@ -128,6 +124,8 @@
                     alert("无查看权限，请联系管理员！")
                 }
                 $('#member').DataTable({
+                    scrollX: true,
+                    bAutoWidth: false,
                     oLanguage : {
                         "sLengthMenu": "每页显示 _MENU_ 条记录",
                         "sZeroRecords": "抱歉， 没有找到",
@@ -151,47 +149,120 @@
                                 var picpath = null;
                                 if(row.people[0] == null){
                                     picpath=null;
-                                }else {
-                                     picpath = row.people[0].picpath;
+                               }else {
+                                  picpath = row.people[0].picpath;
+                                  var html="<div style=' width:50px; height:50px; border-radius:50%; overflow:hidden;'><img style='width:50px; height:50px; border-radius:50%; overflow:hidden;' src= '"+picpath+"'></div>"
                                 }
-/*
-                                alert(row.people[0].picpath);
-*/
-                                var html="<div style=' width:50px; height:50px; border-radius:50%; overflow:hidden;'><img style='width:50px; height:50px; border-radius:50%; overflow:hidden;' src= '"+picpath+"'></div>"
-
-                                /*
-                                                                var html = "<img src= '" + picpath + "'style='height:30px;width:50px;border:none;background: steelblue;color:white;'>"
-                                */
                                 return html;
                             }
                         },
-//                        {data:'userpic'},
-                        {data: 'people[0].name'},
-                        {data: 'people[0].orgid'},
-                        {data: 'people[0].position'},
+                        {data: 'people[0].username'},
+                        {data: 'org[0].orgname'},
+//                        {data: 'people[0].company'},
+                        {
+                            "render": function (data, type, row) {
+                                var company = row.people[0].company;
+                                var html = null;
+                                if(company == null){
+                                    return html;
+                                }else if(company.indexOf(';')>0) {
+                                    var st = company.split(";");
+                                    return st[1];
+                                }else{
+                                    return company;
+                                }
+
+                            }
+                        },
                         {data: 'telphone'},
                         {data: 'email'},
                         {data: 'people[0].nativeplace'},
-                        {data:'userlevel'},
-                        /*{data: 'people[0].introduce'},*/
                         {
                             "render": function (data, type, row) {
-                                var id= '"' + row.userid + '"';
-                                var html = "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'>启用</button>"
+                                var status = row.isenabledYZJ;
+                                if (status == false) {
+                                    var html = "<button style='height:30px;width:50px;border:none;background: darkred;color:white;margin-left: auto;margin-right: auto;'>禁用</button>"
+                                } else {
+                                    var html = "<button style='height:30px;width:50px;border:none;background: darkgreen;color:white;margin-left: auto;margin-right: auto;'>启用</button>"
+                                }
+                                return html;
+                            }
+                        },
+                        {
+                            "render": function (data, type, row) {
+                                var id= row.people[0].id ;
+                                var html = "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'  onclick=location.href='editpeople.jsp?id="+ id + "'>修改</button>"
                                 html += "&nbsp;&nbsp;&nbsp;"
-                                html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;'>禁用</button>"
+                                html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=\"StatusOn('" + id + "')\">启用</button>"
+                                html += "&nbsp;&nbsp;&nbsp;"
+                                html += "<button style='height:30px;width:50px;border:none;background: steelblue;color:white;' onclick=\"StatusOff('" + id + "')\">禁用</button>"
+                                html += "&nbsp;&nbsp;&nbsp;"
+                                html += "<button style='height:30px;width:50px;border:none;background:darkred;color:white;' onclick=\"Delete('" + id + "')\">删除</button>"
                                 return html;
                             }
                         },
                     ],
                     "fnInitComplete": function() {
-                        this.fnAdjustColumnSizing(true);
-                    }
+                      this.fnAdjustColumnSizing(true);
+                  }
                 });
             }
         });
     }
 
+    function StatusOn(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>PeopleController/StatusOn",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("已启用！");
+                    location.reload("pfrole.jsp");
+                }else{
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
+
+    function StatusOff(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>PeopleController/StatusOff",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("已禁用！");
+                    location.reload("pfrole.jsp");
+                }else{
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
+
+    function Delete(id){
+        $.ajax({
+            type: "post",
+            url: "<%=basePath%>PeopleController/Delete",
+            data:{id:id},
+            cache:false,
+            async:true,
+            success:function (data) {
+                if(data=="OK"){
+                    alert("删除成功！");
+                    location.reload("pfpeople.jsp");
+                }else{
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
 
 
 </script>

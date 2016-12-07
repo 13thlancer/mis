@@ -11,8 +11,12 @@ import java.util.List;
 public interface OrgMapper {
     int addOrg(Org org);
 
+    int updateOrg(Org org);
+
     List<Org> selectOrg();
 
     List ShowOrgType();
+
+    List showOrgByid(String id);
 
 }

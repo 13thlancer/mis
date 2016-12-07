@@ -8,9 +8,7 @@ import com.mis.service.PeopleServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/9/25.
@@ -41,13 +39,45 @@ public class PeopleServiceImpl implements PeopleServiceI {
 //    }
 
     @Override
-    public void AddPeople(People people, User user) {
+    public void addPeople(People people, User user) {
         peopleMapper.addPeople(people);
         managerMapper.addUser(user);
     }
 
     @Override
-    public List<User> ShowPeople() {
+    public void updatePeople(People people) {
+        peopleMapper.updatePeople(people);
+    }
+
+    @Override
+    public List<User> showPeople() {
         return peopleMapper.showPeople();
+    }
+
+    @Override
+    public List<User> showPeopleById(String id) {
+
+        return peopleMapper.showPeopleById(id);
+    }
+
+    @Override
+    public List<User> showPeopleByOrgnum(String orgnum) {
+        return peopleMapper.showPeopleByOrgnum(orgnum);
+    }
+
+    @Override
+    public void delete(String id) {
+        peopleMapper.deletePeople(id);
+        peopleMapper.deleteUser(id);
+    }
+
+    @Override
+    public void statusOn(String id) {
+        peopleMapper.statuson(id);
+    }
+
+    @Override
+    public void statusOff(String id) {
+        peopleMapper.statusoff(id);
     }
 }

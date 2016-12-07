@@ -51,17 +51,37 @@ public class PeopleController {
     @RequestMapping(value = "ShowPeople",method= RequestMethod.POST)
     @ResponseBody
     public List ShowPeople(){
-        return peopleServiceI.ShowPeople();
+        return peopleServiceI.showPeople();
+    }
+
+    @ResponseBody
+    @RequestMapping(value="ShowPeopleByOrgnum",method = RequestMethod.POST)
+    public List<User> showPeopleByOrgnum(String orgnum){
+        return peopleServiceI.showPeopleByOrgnum(orgnum);
     }
 
     @RequestMapping(value = "ShowType",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,List> ShowType(){
-        List orgList = orgServiceI.ShowOrg();
+        List orgList = orgServiceI.showOrg();
         List typeList = articleServiceI.showType(50);
         Map<String,List> map = new HashMap<String,List>();
         map.put("Org",orgList);
         map.put("Type",typeList);
+        return map;
+    }
+
+
+    @RequestMapping(value = "ShowPeoplById",method= RequestMethod.POST)
+    @ResponseBody
+    public Map<String,List> ShowPeoplById(String id){
+        List orgList = orgServiceI.showOrg();
+        List typeList = articleServiceI.showType(50);
+        List userList = peopleServiceI.showPeopleById(id);
+        Map<String,List> map = new HashMap<String,List>();
+        map.put("Org",orgList);
+        map.put("Type",typeList);
+        map.put("User",userList);
         return map;
     }
 
@@ -104,9 +124,11 @@ public class PeopleController {
         String telphone = request.getParameter("telphone");
         String email = request.getParameter("email");
 
-        String userorigo = request.getParameter("userorigo");
-        String userlevel = request.getParameter("userlevel");
-        String Intro = request.getParameter("Intro");
+        String seq = request.getParameter("seq");
+        String nativeplace = request.getParameter("nativeplace");
+        String company = request.getParameter("company");
+        String companytype = request.getParameter("companytype");
+        String Intro = request.getParameter("introduce");
         Date date = new Date();
         String picpath = null;
         People people = new People();
@@ -132,19 +154,69 @@ public class PeopleController {
         String id = UUID.randomUUID().toString();
         user.setUserid(id);
         user.setPeopleid(peopleid);
+        user.setIsenabledMis(true);
         user.setEmail(email);
         user.setTelphone(telphone);
 
-
         people.setPicpath(pp);
         people.setId(peopleid);
-        people.setName(username);
+        people.setUsername(username);
         people.setIntroduce(Intro);
-        people.setPosition(userlevel);
+        people.setCompany(company);
         people.setOrgid(orgname);
-        people.setNativeplace(userorigo);
+        people.setNativeplace(nativeplace);
+        people.setCompanytype(Integer.parseInt(companytype));
+        people.setCompanytype(Integer.parseInt(seq));
         people.setCreatetime(date);
 
-        peopleServiceI.AddPeople(people,user);
+        peopleServiceI.addPeople(people, user);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="UpdatePeople",method=RequestMethod.POST)
+    public void updatePeople(HttpServletRequest request,@RequestParam MultipartFile[] Pic,People people) throws IOException {
+        String dir = UploadUtil.getFolder();
+        String path = null;
+        String basePath = null;
+        String picdir = null;
+        String picpath = null;
+
+        System.out.println(request.getParameter("Title"));
+        for(MultipartFile myfile : Pic){
+            if(myfile.isEmpty()){
+                System.out.println("文件未上传");
+            }else{
+                //上传文件 返回路径
+                path =  request.getContextPath();
+                basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+                picdir = request.getSession().getServletContext().getRealPath("") + "\\img";
+                picpath = UploadUtil.writeFile(myfile.getOriginalFilename(), dir, myfile.getInputStream(),picdir);
+            }
+        }
+        String pp =basePath+picpath;
+
+        people.setPicpath(pp);
+        peopleServiceI.updatePeople(people);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="Delete",method=RequestMethod.POST)
+    public String delete(String id){
+        peopleServiceI.delete(id);
+        return "OK";
+    }
+
+    @RequestMapping(value="StatusOn",method= RequestMethod.POST)
+    @ResponseBody
+    public String statusOn(String id) {
+        peopleServiceI.statusOn(id);
+        return "OK";
+    }
+
+    @RequestMapping(value="StatusOff", method = RequestMethod.POST)
+    @ResponseBody
+    public String statusOff(String id){
+        peopleServiceI.statusOff(id);
+        return "OK";
     }
 }

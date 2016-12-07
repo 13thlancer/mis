@@ -1,8 +1,6 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%
-    HttpSession s = request.getSession();
-    String username=(String)s.getAttribute("username");
     String path = request.getContextPath();
     String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
@@ -23,8 +21,6 @@
     <link rel="stylesheet" href="../../plugins/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
-    <link href="../../plugins/bootstrap-fileinput/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../plugins/bootstrap-fileinput/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
     <script src="../../bootstrap/js/html5shiv.min.js" type="text/javascript"></script>
     <script src="../../bootstrap/js/respond.min.js"　type="text/javascript"></script>
     <style type="text/css">
@@ -47,52 +43,75 @@
                 <div id="baseinfo" class="tab-pane fade in active" >
                     <form id="addPeople" class="form-horizontal" novalidate="novalidate">
                         <fieldset>
-                            <input id="ID" type="hidden" name="id">
+                            <input id="id" type="hidden" name="id">
                             <div style="margin-left: 10%;margin-top:1%;">
+
                                 <div class="form-group">
                                     <label for="username" class="col-sm-2 control-label">姓名</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="username" id="username">
+                                        <input type="text" class="form-control" name="username" id="username" style="width:80%;">
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="orgname" class="col-sm-2 control-label">商会职务</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="orgname" id="orgname">
+                                        <select class="form-control"  style="width:80%;" name="orgname" id="orgname">
+                                            <option value="">请选择所属组织...</option>
+                                        </select>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="seq" class="col-sm-2 control-label">资历排序</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="seq" id="seq" style="width:80%;">
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="telphone" class="col-sm-2 control-label">联系方式</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="telphone" id="telphone">
+                                        <input type="text" class="form-control" name="telphone" id="telphone" style="width:80%;">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="email" class="col-sm-2 control-label">邮箱</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="email" id="email">
+                                        <input type="text" class="form-control" name="email" id="email" style="width:80%;">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="userorigo" class="col-sm-2 control-label">籍贯</label>
+                                    <label for="nativeplace" class="col-sm-2 control-label">籍贯</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="userorigo" id="userorigo">
+                                        <input type="text" class="form-control" name="nativeplace" id="nativeplace" style="width:80%;">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="userlevel" class="col-sm-2 control-label">所属组织</label>
+                                    <label for="company" class="col-sm-2 control-label">公司职位</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="userlevel" id="userlevel">
+                                        <input type="text" class="form-control" name="company" id="company" style="width:80%;">
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="companytype" class="col-sm-2 control-label">公司及职位</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control"  style="width:80%;" name="companytype" id="companytype">
+                                            <option value="">请选择公司类型...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="Pic" class="col-sm-2 control-label">会员头像</label>
                                     <div class="col-sm-10">
                                         <input type="file" class="form-control" name="Pic" id="Pic" style="width:80%;" onchange="javascript:setImagePreviews();" accept="image/*" >
                                         <div id="view" style=" width:100%;"></div>
+
                                     </div>
                                 </div>
                                 <div class="form-group" >
@@ -198,8 +217,17 @@
             url:"<%=basePath%>PeopleController/ShowType",
             async:false,
             success:function(data) {
-                alert(data.Org[0].name);
-                alert(data.Type[0].name);
+                var length = data.Type.length;
+                for(var i = 0;i<length;i++) {
+                    $('#companytype').append('<option value=' + data.Type[i].number + '>' + data.Type[i].name + '</option>');
+                }
+
+                var len = data.Org.length;
+                for(var j = 0;j<len;j++) {
+                    $('#orgname').append('<option value='+data.Org[j].orgnumber+'>'+data.Org[j].orgname+'</option>');
+                }
+//                alert(data.Org[0].name);
+//                alert(data.Type[0].name);
               /*  if (data.type == 'nosignin') {
                     alert("无添加权限，请联系管理员！")
                 } else {
@@ -212,7 +240,7 @@
     function addPeople() {
         var html = editor.$txt.html();
         var formData = new FormData($( "#addPeople" )[0]);
-        formData.append("Intro",html);
+        formData.append("introduce",html);
         $.ajax({
             type:"POST",
             url:"<%=basePath%>PeopleController/AddPeople",

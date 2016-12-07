@@ -23,7 +23,7 @@ public class RoleServiceImpl implements RoleServiceI {
     private RoleMapper roleMapper;
 
     @Override
-    public void AddRole(Role role) {
+    public void addRole(Role role) {
         UUID uuid = UUID.randomUUID();
         Date date = new Date();
         String uuidstr = uuid.toString();
@@ -34,23 +34,28 @@ public class RoleServiceImpl implements RoleServiceI {
     }
 
     @Override
-    public List ShowRole() {
+    public List showRole() {
         return roleMapper.select();
     }
 
     @Override
-    public void StatusOff(String id){
+    public List showAllRole() {
+        return roleMapper.select();
+    }
+
+    @Override
+    public void statusOff(String id){
         roleMapper.statusoff(id);
     }
 
 
     @Override
-    public void StatusOn(String id){
+    public void statusOn(String id){
         roleMapper.statuson(id);
     }
 
     @Override
-    public void EditAction(String rolenum, String actionnum) {
+    public void editAction(String rolenum, String actionnum) {
         String[] strArray = null;
         strArray = actionnum.split(",");
         List<RoleAction> list = new ArrayList<RoleAction>();
